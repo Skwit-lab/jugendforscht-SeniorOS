@@ -1,0 +1,6 @@
+Über die enthaltenen Erweiterungen
+Da ich nicht sicherstellen kann, ob ich Erweiterungen anderer Entwickler ohne deren Zustimmung in diesem Projekt bereitstellen darf, bitte ich alle Nutzerinnen und Nutzer, die folgenden GNOME‑Shell‑Erweiterungen selbstständig zu installieren:
+- blur-my-shell (blur-my-shell@aunetx)
+- DING – Desktop Icons NG (ding@rastersoft.com)
+- Dash2Dock Lite (dash2dock-lite@icedman.github.com)
+Vielen Dank für das Verständnis.
