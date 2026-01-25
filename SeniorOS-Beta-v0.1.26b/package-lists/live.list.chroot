@@ -1,0 +1,34 @@
+# 🔧 Live-Basis
+live-boot
+live-config
+live-config-systemd
+systemd-sysv
+
+# 🖥️ Desktop-Umgebung
+gnome
+thunderbird
+
+# 🧰 Calamares GUI & Tools
+# calamares
+qt5-gtk-platformtheme
+x11-utils
+x11-xserver-utils
+os-prober
+parted
+dbus-x11
+# calamares-settings-debian 
+
+qml-module-qtquick-controls
+qml-module-qtgraphicaleffects
+qt5-gtk-platformtheme
+
+# 🐍 Python & Tools
+python3
+rsync
+
+# ⚙️ Bootloader & Kernel
+grub-pc
+linux-image-6.12.43+deb12-rt-amd64
+
+# 🔍 Terminal & Netzwerk
+lynx

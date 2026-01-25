@@ -1,0 +1,11 @@
+#!/bin/sh
+lb config noauto \
+  --architecture amd64 \
+  --distribution bookworm \
+  --binary-images iso \
+  --bootloader grub-pc \
+  --debian-installer false \
+  --mirror-bootstrap http://ftp.de.debian.org/debian/ \
+  --mirror-binary http://ftp.de.debian.org/debian/ \
+  --bootappend-live "boot=live components locales=de_DE.UTF-8 keyboard-layouts=de splash quiet" \
+  --memtest none
