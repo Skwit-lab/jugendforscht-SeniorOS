@@ -24,18 +24,26 @@ pub fn get_system_disks() -> Result<Vec<DiskInfo>> {
     // 3. Hier erstellen wir eine leere Liste, in die wir gleich unsere Ergebnisse sammeln
     let mut disk_list = Vec::new();
 
-    // (Hier kommt gleich die Schleife rein, die den Text zerlegt)
+   // Wir gehen den Text Zeile für Zeile durch
     for line in stdout_text.lines() {
+        // Wörter bei jedem Leerzeichen trennen
         let parts: Vec<&str> = line.split_whitespace().collect();
-        if parts.len() == 3 {
-            let disk_info = DiskInfo {
-                name: parts[0].into(),
-                size: parts[1].into(),
-                model: parts[2].into(),
+        
+        // Sicherheitscheck: Haben wir mindestens Name und Größe? (>= 2)
+        if parts.len() >= 2 {
+            let name = parts[0].to_string();
+            let size = parts[1].to_string();
+            
+            // Wenn mehr als 2 Wörter da sind, kleben wir das Modell wieder zusammen
+            let model = if parts.len() > 2 {
+                parts[2..].join(" ")
+            } else {
+                "Unbekanntes Modell".to_string()
             };
+
+            let disk_info = DiskInfo { name, size, model };
             disk_list.push(disk_info);
         }
     }
-
     Ok(disk_list)
 }
