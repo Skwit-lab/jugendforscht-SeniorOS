@@ -25,6 +25,17 @@ pub fn get_system_disks() -> Result<Vec<DiskInfo>> {
     let mut disk_list = Vec::new();
 
     // (Hier kommt gleich die Schleife rein, die den Text zerlegt)
+    for line in stdout_text.lines() {
+        let parts: Vec<&str> = line.split_whitespace().collect();
+        if parts.len() == 3 {
+            let disk_info = DiskInfo {
+                name: parts[0].into(),
+                size: parts[1].into(),
+                model: parts[2].into(),
+            };
+            disk_list.push(disk_info);
+        }
+    }
 
     Ok(disk_list)
 }
