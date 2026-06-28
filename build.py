@@ -2,6 +2,7 @@ import subprocess
 import argparse
 import os
 import sys
+import shutil
 
 def run(cmd, cwd=None):
     print(f"→ {cmd}")
@@ -28,7 +29,7 @@ def main():
     print("═══════════════════════════════════════\n")
 
     # Step 1: Docker-Image bauen
-    print("[1/2] Docker-Image bauen ...")
+    print("[1/3] Docker-Image bauen ...")
     build_cmd = f"docker build -t {image_name} ."
     if args.no_cache:
         build_cmd += " --no-cache"
@@ -39,15 +40,22 @@ def main():
         print("⏭️  ISO-Build übersprungen (--skip-build).")
         sys.exit(0)
 
-    # Step 2: Live-ISO bauen
-    print("[2/2] Debian Live-ISO bauen (dauert ~30-60 Min) ...\n")
+    # Step 2: Host-Seite bereinigen (Docker-Volume-Mount-Probleme vermeiden)
+    print("[2/3] Host-Build-Artefakte bereinigen ...")
+    for d in ["bootstrap", "chroot", "cache", "binary", ".build", "config"]:
+        p = os.path.join(config_path, d)
+        if os.path.exists(p):
+            shutil.rmtree(p, ignore_errors=True)
+    print("✅ Host bereinigt.\n")
+
+    print("[3/3] Debian Live-ISO bauen (dauert ~30-60 Min) ...\n")
 
     docker_cmd = (
         f"docker run --privileged --rm "
         f"-v \"{config_path}:/build\" "
         f"-w /build "
         f"{image_name} "
-        f"bash -c \"chmod +x auto/config && rm -rf bootstrap chroot cache binary && lb clean --purge && lb build\""
+        f"bash -c \"lb clean --purge && chmod +x auto/config && lb build --force\""
     )
 
     run(docker_cmd)

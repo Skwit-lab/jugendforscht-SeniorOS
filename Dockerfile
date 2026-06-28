@@ -6,3 +6,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /build
 
+CMD ["lb clean"]
+CMD ["lb config"]
+CMD ["lb build"]
