@@ -47,7 +47,7 @@ def main():
         f"-v \"{config_path}:/build\" "
         f"-w /build "
         f"{image_name} "
-        f"bash -c \"chmod +x auto/config && lb build\""
+        f"bash -c \"chmod +x auto/config && lb clean && lb build\""
     )
 
     run(docker_cmd)

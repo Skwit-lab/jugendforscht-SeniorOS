@@ -1,0 +1,23 @@
+# Debian Live-Build Artefakte
+chroot/
+binary/
+bootstrap/
+cache/
+
+# ISO output
+*.iso
+
+# Temporary build files
+tmp/
+work/
+
+# Live-Build generated config
+config/binary
+config/bootstrap
+config/chroot
+
+# Live-Build Hook-Symlinks (Windows inkompatibel)
+SeniorOS-Beta-v0.1.26b/config/hooks/
+
+# Logs
+*.log
