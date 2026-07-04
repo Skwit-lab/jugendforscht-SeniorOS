@@ -47,3 +47,7 @@ pub fn get_system_disks() -> Result<Vec<DiskInfo>> {
     }
     Ok(disk_list)
 }
+
+pub fn Create_file_system_t1(&str: Partition_Root) {
+    Command::new("mke2fs").args(["-j", Partition_Root]).output()?.expect("Faild to create root filesystem :(");
+}
