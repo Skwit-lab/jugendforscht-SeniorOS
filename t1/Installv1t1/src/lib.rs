@@ -1,7 +1,7 @@
 // src/lib.rs
 
 // Ganz oben in src/lib.rs einfügen:
-use std::process::Command; // Das Werkzeug, um Linux-Befehle auszuführen
+use std::{process::{Command, Output}, result}; // Das Werkzeug, um Linux-Befehle auszuführen
 use anyhow::{Result, anyhow}; // Für eine sichere Fehlerbehandlung
 
 /// Diese Struktur speichert die Hardware-Daten einer erkannten Festplatte.
@@ -48,6 +48,8 @@ pub fn get_system_disks() -> Result<Vec<DiskInfo>> {
     Ok(disk_list)
 }
 
-pub fn Create_file_system_t1(&str: Partition_Root) {
-    Command::new("mke2fs").args(["-j", Partition_Root]).output()?.expect("Faild to create root filesystem :(");
+pub fn Create_file_system_t1(Partition_Root: &str) -> Result<()> {
+    let PRFilesysOut= Command::new("mke2fs").args(["-j", Partition_Root]).output()?;
+    
+    Ok(())
 }
