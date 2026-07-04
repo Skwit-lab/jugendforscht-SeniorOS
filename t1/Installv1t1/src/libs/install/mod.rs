@@ -1,8 +1,7 @@
-// src/lib.rs
+pub mod easy;
 
-// Ganz oben in src/lib.rs einfügen:
-use std::{process::{Command, Output}, result}; // Das Werkzeug, um Linux-Befehle auszuführen
-use anyhow::{Result, anyhow}; // Für eine sichere Fehlerbehandlung
+use std::process::Command;
+use anyhow::{Result, anyhow};
 
 /// Diese Struktur speichert die Hardware-Daten einer erkannten Festplatte.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -48,8 +47,51 @@ pub fn get_system_disks() -> Result<Vec<DiskInfo>> {
     Ok(disk_list)
 }
 
-pub fn Create_file_system_t1(Partition_Root: &str) -> Result<()> {
-    let PRFilesysOut= Command::new("mke2fs").args(["-j", Partition_Root]).output()?;
-    
+pub fn create_file_system(partition_root: &str) -> Result<()> {
+    Command::new("mke2fs")
+        .args(["-j", partition_root])
+        .output()?;
     Ok(())
+}
+
+/// Beschreibt eine einzelne Partition
+#[derive(Debug, Clone)]
+pub struct PartitionConfig {
+    pub mountpoint: String,  // "/", "/boot", "/home", "swap"
+    pub size: String,         // "500M", "20G", "0" für Rest
+    pub filesystem: String,   // "ext4", "ext2", "linux-swap"
+}
+
+/// Der gesamte Installationsplan
+#[derive(Debug, Clone)]
+pub struct InstallConfig {
+    pub disk: String,
+    pub partitions: Vec<PartitionConfig>,
+}
+
+impl PartitionConfig {
+    pub fn default_layout() -> Vec<PartitionConfig> {
+        vec![
+            PartitionConfig {
+                mountpoint: "/boot".into(),
+                size: "1G".into(),
+                filesystem: "ext2".into(),
+            },
+            PartitionConfig {
+                mountpoint: "/".into(),
+                size: "0".into(),
+                filesystem: "ext4".into(),
+            },
+            PartitionConfig {
+                mountpoint: "/home".into(),
+                size: "0".into(),
+                filesystem: "ext4".into(),
+            },
+            PartitionConfig {
+                mountpoint: "swap".into(),
+                size: "8G".into(),
+                filesystem: "linux-swap".into(),
+            },
+        ]
+    }
 }
