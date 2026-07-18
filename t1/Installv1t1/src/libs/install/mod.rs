@@ -69,3 +69,35 @@ pub struct InstallConfig {
     pub partitions: Vec<PartitionConfig>,
 }
 
+/// Gibt die Größe einer Disk in Bytes zurück (z.B. "/dev/sda")
+pub fn get_disk_total_size(disk: &str) -> Result<u64> {
+    let output = Command::new("lsblk")
+        .args(["-bndo", "SIZE", disk])
+        .output()?;
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    let size_str = stdout.trim();
+
+    size_str
+        .parse::<u64>()
+        .map_err(|e| anyhow!("Konnte Disk-Größe nicht parsen: {e}"))
+}
+
+/// Wandelt "500M", "8G" etc. in Bytes um
+pub fn parse_size_str(size: &str) -> Result<u64> {
+    let size = size.trim();
+    if let Some(num) = size.strip_suffix('G') {
+        let val = num.parse::<u64>()?;
+        Ok(val * 1024 * 1024 * 1024)
+    } else if let Some(num) = size.strip_suffix('M') {
+        let val = num.parse::<u64>()?;
+        Ok(val * 1024 * 1024)
+    } else if let Some(num) = size.strip_suffix('K') {
+        let val = num.parse::<u64>()?;
+        Ok(val * 1024)
+    } else {
+        size.parse::<u64>()
+            .map_err(|e| anyhow!("Ungültige Größenangabe '{size}': {e}"))
+    }
+}
+
