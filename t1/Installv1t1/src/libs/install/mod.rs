@@ -130,6 +130,22 @@ pub fn create_partitions(config: &InstallConfig) -> Result<()> {
             ])
             .status()?;
 
+        if !status.success() {
+        return Err(anyhow!("Konnte Partitionstabelle nicht erstellen"));
+        }
+
         start_bytes = end_bytes;
+
     }
+
+    ok(())
 }
+
+fn partition_path(disk: &str, partition_number: usize) -> String {
+    let needs_p = disk.chars().last().is_some_and(|c| c.is_ascii_digit());
+    
+    if needs_p {
+        format!("{disk}p{partition_number}")
+    } else {
+        format!("{disk}{partition_number}")
+    }
