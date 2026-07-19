@@ -131,10 +131,19 @@ pub fn create_partitions(config: &InstallConfig) -> Result<()> {
             .status()?;
 
         if !status.success() {
-        return Err(anyhow!("Konnte Partitionstabelle nicht erstellen"));
+            return Err(anyhow!("Konnte Partitionstabelle nicht erstellen"));
         }
 
         start_bytes = end_bytes;
+
+        let path = partition_path(&config.disk, i + 1); //definiert den Pfad der Partition
+
+        if part.filesystem == "linux-swap" {
+            Command::new("mkswap").arg(&path).status()?;
+        }
+        else {
+            create_file_system(&path)?;
+        }
 
     }
 
