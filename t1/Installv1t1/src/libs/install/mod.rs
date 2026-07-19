@@ -101,3 +101,6 @@ pub fn parse_size_str(size: &str) -> Result<u64> {
     }
 }
 
+pub fn create_partitions(config: &InstallConfig) -> Result<()> {
+    
+}

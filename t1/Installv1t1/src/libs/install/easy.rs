@@ -1,5 +1,5 @@
-use anyhow::Result;
-use super::{PartitionConfig, get_disk_total_size, parse_size_str};
+use anyhow::{Ok, Result};
+use super::{PartitionConfig, InstallConfig, get_disk_total_size, parse_size_str, create_partitions};
 
 pub fn default_layout(disk: &str) -> Result<Vec<PartitionConfig>> {
     let total_bytes = get_disk_total_size(disk)?;
@@ -33,4 +33,14 @@ pub fn default_layout(disk: &str) -> Result<Vec<PartitionConfig>> {
             filesystem: "linux-swap".into(),
         },
     ])
+}
+
+
+fn create_install_config(disk: &str) -> Result<InstallConfig> {
+    let partitions = default_layout(disk)?;
+
+    Ok(InstallConfig {
+        disk: disk.to_string(),
+        partitions,
+    })
 }
