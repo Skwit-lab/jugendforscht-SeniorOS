@@ -147,7 +147,7 @@ pub fn create_partitions(config: &InstallConfig) -> Result<()> {
 
     }
 
-    ok(())
+    Ok(())
 }
 
 fn partition_path(disk: &str, partition_number: usize) -> String {
