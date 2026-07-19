@@ -149,3 +149,4 @@ fn partition_path(disk: &str, partition_number: usize) -> String {
     } else {
         format!("{disk}{partition_number}")
     }
+}
