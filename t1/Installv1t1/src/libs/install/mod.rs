@@ -102,5 +102,34 @@ pub fn parse_size_str(size: &str) -> Result<u64> {
 }
 
 pub fn create_partitions(config: &InstallConfig) -> Result<()> {
-    
+
+        // 1. Neue (leere) Partitionstabelle anlegen
+    let status = Command::new("parted")
+        .args(["--script", &config.disk, "mklabel", "gpt"])
+        .status()?;
+
+    if !status.success() {
+        return Err(anyhow!("Konnte Partitionstabelle nicht erstellen"));
+    }
+
+    let mut start_bytes: u64 = 1024 * 1024; // 1 MiB Sicherheitsabstand am Anfang, in Bytes
+
+    for (i, part) in config.partitions.iter().enumerate() {
+        let size_bytes: u64 = part.size.parse()?;
+        let end_bytes = start_bytes + size_bytes;
+
+        // ... parted-Aufruf mit start_bytes und end_bytes, jeweils + "B"
+                let status = Command::new("parted")
+            .args([
+                "--script",
+                &config.disk,
+                "mkpart",
+                "primary",
+                &format!("{start_bytes}B"),
+                &format!("{end_bytes}B"),
+            ])
+            .status()?;
+
+        start_bytes = end_bytes;
+    }
 }
